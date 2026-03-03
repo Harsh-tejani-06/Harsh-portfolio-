@@ -31,7 +31,7 @@ const Contact = () => {
 
   const socialLinks = [
     { icon: Github, label: 'GitHub', href: 'https://github.com/Harsh-tejani-06', color: 'hover:text-[#333]' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/harsh-tejani', color: 'hover:text-[#0077b5]' },
+    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/harsh-tejani-38a56428b', color: 'hover:text-[#0077b5]' },
   ]
 
   const handleCopy = (text) => {

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 const Hero = () => {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/Harsh-tejani-06', label: 'GitHub', color: 'hover:text-[#333]' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/harsh-tejani', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/harsh-tejani-38a56428b', label: 'LinkedIn', color: 'hover:text-[#0077b5]' },
     { icon: Mail, href: 'mailto:harshtejani06@gmail.com', label: 'Email', color: 'hover:text-[#ea4335]' },
   ]
 
@@ -176,7 +176,7 @@ const Hero = () => {
                 transition={{ repeat: Infinity, duration: 10 }}
                 className="absolute inset-0 rounded-full bg-gradient-to-r from-accent/20 to-accent/30 blur-3xl"
               />
-              
+
               {/* Profile Image Container */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -189,7 +189,7 @@ const Hero = () => {
                   className="w-full h-full object-cover object-center"
                 />
               </motion.div>
-              
+
               {/* Status indicator */}
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
