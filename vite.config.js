@@ -4,12 +4,12 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    include: ['lucide-react']
-  },
+
+  // IMPORTANT: must match your GitHub repo name exactly
+  base: '/Harsh-portfolio-/',
+
   build: {
-    rollupOptions: {
-      external: ['lucide-react']
-    }
+    outDir: 'dist',
+    sourcemap: false
   }
 })
