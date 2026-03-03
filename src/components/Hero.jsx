@@ -96,11 +96,11 @@ const Hero = () => {
               <div className="absolute inset-0 rounded-full border-2 border-theme opacity-30 scale-105"></div>
               
               {/* Profile Image */}
-              <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-card shadow-2xl">
+              <div className="relative w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-card shadow-2xl">
                 <img
                   src="/Harsh.png"
                   alt="Harsh Tejani"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-full object-cover object-[center_43%]"
                 />
               </div>
               
