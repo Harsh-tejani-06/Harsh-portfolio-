@@ -1,14 +1,9 @@
-import { Mail, Phone, MapPin, Github, Linkedin, Send, Copy, Check } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Linkedin, Copy, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 const Contact = () => {
   const [copied, setCopied] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  })
 
   const contactInfo = [
     {
@@ -45,11 +40,6 @@ const Contact = () => {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Handle form submission here
-    window.location.href = `mailto:harshtejani06@gmail.com?subject=Contact from ${formData.name}&body=${formData.message}`
-  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -86,7 +76,7 @@ const Contact = () => {
           <div className="w-20 h-1 bg-accent mx-auto rounded-full mt-4"></div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="max-w-2xl mx-auto">
           {/* Left Column - Contact Info */}
           <motion.div
             variants={containerVariants}
@@ -164,72 +154,7 @@ const Contact = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="bg-card rounded-2xl p-8 border border-border-color">
-              <h3 className="text-2xl font-semibold text-text-primary mb-6">
-                Send a Message
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary"
-                    placeholder="john@example.com"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-text-secondary mb-2">
-                    Your Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows="4"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
-                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary resize-none"
-                    placeholder="Tell me about your project..."
-                  />
-                </div>
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-white font-semibold hover:bg-accent-hover transition-all duration-200"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>Send Message</span>
-                </motion.button>
-              </form>
-            </div>
-          </motion.div>
+
         </div>
       </div>
     </section>
