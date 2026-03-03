@@ -98,7 +98,7 @@ const Hero = () => {
               {/* Profile Image */}
               <div className="relative w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-card shadow-2xl">
                 <img
-                  src="/Harsh.png"
+                  src="./Harsh.png"
                   alt="Harsh Tejani"
                   className="w-full h-full object-cover object-[center_43%]"
                 />
