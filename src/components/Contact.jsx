@@ -1,92 +1,235 @@
-import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Github, Linkedin, Send, Copy, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
 
 const Contact = () => {
+  const [copied, setCopied] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+
   const contactInfo = [
     {
       icon: Mail,
       label: 'Email',
       value: 'harshtejani06@gmail.com',
-      href: 'mailto:harshtejani06@gmail.com'
+      href: 'mailto:harshtejani06@gmail.com',
+      copyable: true
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+91 9265656769',
-      href: 'tel:+919265656769'
+      value: '+91 92656 56769',
+      href: 'tel:+919265656769',
+      copyable: true
     },
     {
       icon: MapPin,
       label: 'Location',
       value: 'Surat, Gujarat, India',
-      href: '#'
+      href: '#',
+      copyable: false
     }
   ]
 
   const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/Harsh-tejani-06' },
-    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com' }
+    { icon: Github, label: 'GitHub', href: 'https://github.com/Harsh-tejani-06', color: 'hover:text-[#333]' },
+    { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/harsh-tejani', color: 'hover:text-[#0077b5]' },
   ]
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // Handle form submission here
+    window.location.href = `mailto:harshtejani06@gmail.com?subject=Contact from ${formData.name}&body=${formData.message}`
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  }
 
   return (
     <section id="contact" className="py-20 bg-secondary">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Get In <span className="accent-text">Touch</span>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
+            Get In <span className="text-accent">Touch</span>
           </h2>
-          <p className="text-muted max-w-2xl mx-auto">
-            Have a project in mind or want to collaborate? Feel free to reach out!
+          <p className="text-text-muted max-w-2xl mx-auto">
+            Have a project in mind or want to collaborate? I'd love to hear from you!
           </p>
-          <div className="w-20 h-1 accent-bg mx-auto rounded-full mt-4"></div>
-        </div>
+          <div className="w-20 h-1 bg-accent mx-auto rounded-full mt-4"></div>
+        </motion.div>
 
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold text-primary mb-4">
-            Let's Connect
-          </h3>
-          <p className="text-secondary leading-relaxed">
-            I'm always excited to discuss new projects, opportunities, and collaborations.
-            Click on any contact method below to reach me directly.
-          </p>
-        </div>
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Column - Contact Info */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="space-y-6"
+          >
+            <motion.div variants={itemVariants}>
+              <h3 className="text-2xl font-semibold text-text-primary mb-4">
+                Let's Connect
+              </h3>
+              <p className="text-text-secondary leading-relaxed">
+                I'm always excited to discuss new projects, opportunities, and collaborations.
+                Feel free to reach out through any of these channels.
+              </p>
+            </motion.div>
 
-        {/* Contact Cards */}
-        <div className="space-y-4 mb-8">
-          {contactInfo.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="flex items-center gap-4 p-4 rounded-xl bg-card border border-theme hover:border-accent transition-all duration-200 group"
-            >
-              <div className="p-3 rounded-lg accent-bg group-hover:scale-110 transition-transform duration-200">
-                <item.icon className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-muted">{item.label}</p>
-                <p className="font-medium text-primary">{item.value}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        {/* Social Links */}
-        <div className="text-center">
-          <p className="text-sm text-muted mb-4">Follow me on</p>
-          <div className="flex justify-center gap-4">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-lg bg-card border border-theme hover:border-accent hover:accent-text transition-all duration-200"
-                aria-label={link.label}
+            {/* Contact Cards */}
+            {contactInfo.map((item) => (
+              <motion.div
+                key={item.label}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                className="group"
               >
-                <link.icon className="w-5 h-5" />
-              </a>
+                <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border-color hover:border-accent transition-all duration-200">
+                  <a
+                    href={item.href}
+                    className="flex items-center gap-4 flex-1"
+                  >
+                    <div className="p-3 rounded-lg bg-accent group-hover:scale-110 transition-transform duration-200">
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-text-muted">{item.label}</p>
+                      <p className="font-medium text-text-primary">{item.value}</p>
+                    </div>
+                  </a>
+                  {item.copyable && (
+                    <button
+                      onClick={() => handleCopy(item.value)}
+                      className="p-2 rounded-lg hover:bg-accent/10 transition-colors"
+                      aria-label="Copy to clipboard"
+                    >
+                      {copied ? (
+                        <Check className="w-4 h-4 text-green-500" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-text-muted" />
+                      )}
+                    </button>
+                  )}
+                </div>
+              </motion.div>
             ))}
-          </div>
+
+            {/* Social Links */}
+            <motion.div variants={itemVariants}>
+              <p className="text-sm text-text-muted mb-4">Follow me on</p>
+              <div className="flex gap-4">
+                {socialLinks.map((link) => (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -3 }}
+                    className={`p-3 rounded-lg bg-card border border-border-color hover:border-accent transition-all duration-200 ${link.color}`}
+                    aria-label={link.label}
+                  >
+                    <link.icon className="w-5 h-5" />
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column - Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="bg-card rounded-2xl p-8 border border-border-color">
+              <h3 className="text-2xl font-semibold text-text-primary mb-6">
+                Send a Message
+              </h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary"
+                    placeholder="john@example.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-text-secondary mb-2">
+                    Your Message
+                  </label>
+                  <textarea
+                    id="message"
+                    rows="4"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border-color focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-text-primary resize-none"
+                    placeholder="Tell me about your project..."
+                  />
+                </div>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-accent text-white font-semibold hover:bg-accent-hover transition-all duration-200"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Send Message</span>
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
