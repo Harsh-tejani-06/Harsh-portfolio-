@@ -1,166 +1,208 @@
-import { GraduationCap, Target, Code2, Lightbulb, Award } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Target, Lightbulb, Code2, GraduationCap } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  }
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+  const textRef = useRef(null);
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
+  // Parallax scroll effect
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const textY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Text reveal animation
+      const words = textRef.current.querySelectorAll('.word');
+      gsap.fromTo(
+        words,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.02,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: textRef.current,
+            start: 'top 80%',
+            end: 'top 50%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+
+      // Image reveal
+      gsap.fromTo(
+        imageRef.current,
+        { scale: 0.8, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: imageRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const objectiveText =
+    'Motivated IT student with strong interest in backend development, machine learning, and AI systems. Seeking opportunities to apply my skills in C++, Node.js, Machine Learning, and LLM-based systems to solve real-world problems and grow as a software engineer.';
+
+  const words = objectiveText.split(' ');
+
+  const skills = [
+    { icon: Target, title: 'Problem Solving', desc: 'Strong analytical skills with C++' },
+    { icon: Code2, title: 'Backend Architecture', desc: 'Understanding of scalable systems' },
+    { icon: Lightbulb, title: 'AI Enthusiast', desc: 'LangGraph, AI agents & autonomous systems' },
+  ];
 
   return (
-    <section id="about" className="py-20 bg-primary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="relative py-32 bg-[#050508] overflow-hidden"
+    >
+      {/* Background Elements */}
+      <div className="absolute inset-0 grid-pattern opacity-30" />
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-purple-900/10 to-transparent" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-            About <span className="text-accent">Me</span>
+          <span className="text-cyan-400 font-space tracking-widest text-sm mb-4 block">
+            WHO I AM
+          </span>
+          <h2 className="font-space text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            About <span className="gradient-text">Me</span>
           </h2>
-          <div className="w-20 h-1 bg-accent mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto" />
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 gap-12 items-start"
-        >
-          {/* Left Column - About Text */}
-          <div className="space-y-6">
-            <motion.div variants={itemVariants}>
-              <div className="bg-card rounded-2xl p-8 border border-border-color hover:border-accent transition-all duration-300 group">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-lg bg-accent group-hover:scale-110 transition-transform duration-300">
-                    <Target className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-text-primary">Career Objective</h3>
-                </div>
-                <p className="text-text-secondary leading-relaxed">
-                  Motivated IT student with strong interest in backend development, machine learning,
-                  and AI systems. Passionate about applying skills in C++, Node.js, Machine Learning,
-                  and LLM-based systems to solve real-world problems and grow as a software engineer.
-                </p>
-              </div>
-            </motion.div>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left - Image */}
+          <motion.div style={{ y: imageY }} className="relative">
+            <div
+              ref={imageRef}
+              className="relative w-full max-w-md mx-auto"
+            >
+              {/* Decorative ring */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 blur-3xl opacity-20 animate-pulse" />
 
-            <motion.div variants={itemVariants}>
-              <div className="bg-card rounded-2xl p-8 border border-border-color hover:border-accent transition-all duration-300 group">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-lg bg-accent group-hover:scale-110 transition-transform duration-300">
-                    <Lightbulb className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-text-primary">Core Strengths</h3>
-                </div>
-                <ul className="space-y-4 text-text-secondary">
-                  {[
-                    'Problem-solving with C++ and Data Structures',
-                    'Backend architecture and API design',
-                    'AI agents, LangGraph workflows, and autonomous systems',
-                    'Quick learner with hands-on project-based approach',
-                  ].map((item, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-start gap-3"
-                    >
-                      <span className="text-accent mt-1">▹</span>
-                      <span>{item}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          </div>
+              {/* Image container */}
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 glass-card">
+                <img
+                  src="./Harsh.png"
+                  alt="Harsh Tejani"
+                  className="w-full h-auto object-cover"
+                />
 
-          {/* Right Column - Education & Interests */}
-          <div className="space-y-6">
-            <motion.div variants={itemVariants}>
-              <div className="bg-card rounded-2xl p-8 border border-border-color hover:border-accent transition-all duration-300 group">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 rounded-lg bg-accent group-hover:scale-110 transition-transform duration-300">
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent" />
+              </div>
+
+              {/* Floating card */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 4 }}
+                className="absolute -bottom-6 -right-6 glass-card p-4 rounded-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center">
                     <GraduationCap className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-text-primary">Education</h3>
-                </div>
-
-                <div className="space-y-6">
-                  <motion.div
-                    whileHover={{ x: 5 }}
-                    className="relative pl-6 border-l-2 border-border-color"
-                  >
-                    <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-accent"></div>
-                    <div className="mb-2">
-                      <span className="inline-block px-3 py-1 text-sm rounded-full bg-accent/10 text-accent font-medium">
-                        2023 - 2027
-                      </span>
-                    </div>
-                    <h4 className="text-lg font-semibold text-text-primary mb-1">
-                      B.Tech in Information Technology
-                    </h4>
-                    <p className="text-text-secondary">Birla Vishvakarma Mahavidyalaya</p>
-                    <p className="text-text-muted text-sm mt-1">Expected Graduation: May 2027</p>
-                    <p className="text-text-muted text-sm">CGPA: 8.5/10</p>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants}>
-              <div className="bg-card rounded-2xl p-8 border border-border-color hover:border-accent transition-all duration-300 group">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-3 rounded-lg bg-accent group-hover:scale-110 transition-transform duration-300">
-                    <Code2 className="w-6 h-6 text-white" />
+                  <div>
+                    <p className="text-sm text-gray-400">B.Tech IT</p>
+                    <p className="font-semibold text-white">BVM University</p>
                   </div>
-                  <h3 className="text-xl font-semibold text-text-primary">Technical Interests</h3>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    'Backend Development',
-                    'Machine Learning',
-                    'AI Systems',
-                    'LLMs',
-                    'Node.js',
-                    'C++',
-                    'RAG',
-                    'LangChain',
-                  ].map((interest, index) => (
-                    <motion.span
-                      key={interest}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="px-4 py-2 rounded-full bg-secondary text-text-secondary text-sm font-medium border border-border-color hover:border-accent hover:text-accent transition-all duration-200 cursor-default"
-                    >
-                      {interest}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Right - Content */}
+          <motion.div style={{ y: textY }} className="space-y-8">
+            {/* Objective with word-by-word reveal */}
+            <div ref={textRef} className="glass-card p-8 rounded-2xl">
+              <h3 className="font-space text-2xl font-bold mb-6 text-cyan-400">
+                Career Objective
+              </h3>
+              <p className="text-lg text-gray-300 leading-relaxed font-inter">
+                {words.map((word, index) => (
+                  <span key={index} className="word inline-block mr-2">
+                    {word}
+                  </span>
+                ))}
+              </p>
+            </div>
+
+            {/* Skills Grid */}
+            <div className="grid sm:grid-cols-3 gap-4">
+              {skills.map((skill, index) => (
+                <motion.div
+                  key={skill.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="glass-card p-6 rounded-xl text-center group hoverable"
+                >
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <skill.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h4 className="font-semibold text-white mb-2">{skill.title}</h4>
+                  <p className="text-sm text-gray-400">{skill.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Interests Tags */}
+            <div className="flex flex-wrap gap-3">
+              {['Backend Development', 'Machine Learning', 'AI Systems', 'LLMs', 'Node.js', 'C++', 'RAG', 'LangChain'].map(
+                (interest, index) => (
+                  <motion.span
+                    key={interest}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                    viewport={{ once: true }}
+                    whileHover={{ scale: 1.1 }}
+                    className="px-4 py-2 rounded-full glass text-sm text-cyan-400 border border-cyan-400/30 hover:border-cyan-400 transition-colors cursor-default"
+                  >
+                    {interest}
+                  </motion.span>
+                )
+              )}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default About
+export default About;
